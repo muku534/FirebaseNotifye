@@ -34,21 +34,43 @@ function App() {
     )
   }, [])
 
+  // Foreground Notification Handling
   useEffect(() => {
     requestUserPermission();
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log('Notification received in foreground:', remoteMessage);
 
       PushNotification.localNotification({
         channelId: 'default-channel-id',
         title: remoteMessage.notification.title,
-        message: remoteMessage.notification.body
+        message: remoteMessage.notification.body,
+        playSound: true, // Play default sound
+        soundName: 'default', // Ensure sound is set
+        importance: 4,
+        vibrate: true,
       });
     });
 
     return unsubscribe;
   }, [])
+
+  useEffect(() => {
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Notification recevied in background:', remoteMessage);
+
+      PushNotification.localNotification({
+        channelId: 'default-channel-id',
+        title: remoteMessage.notification.title,
+        message: remoteMessage.notification.message,
+        playSound: true,
+        soundName: 'default',
+        vibrate: true,
+        importance: 4
+      })
+    });
+
+  })
 
   return (
     <SafeAreaView style={styles.container}>

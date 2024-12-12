@@ -113,7 +113,18 @@ dependencies {
     implementation (platform('com.google.firebase:firebase-bom:33.3.0'))
     implementation "com.google.firebase:firebase-auth"
     implementation "com.google.firebase:firebase-firestore"
+    implementation(project(':react-native-push-notification')) {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+    implementation 'androidx.core:core:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core:1.9.0'
+            force 'androidx.appcompat:appcompat:1.6.1'
+        }
+    }
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
